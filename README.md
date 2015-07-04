@@ -12,8 +12,10 @@ entry on the [Atlas of Living Australia](http://www.ala.org.au) website.
     2. Clean the CSV for empty entries
   2. Schema preparation:
     1. Ensure PostGIS is enabled by running `CREATE EXTENSION postgis;` 
-    2. Run `sql/1.SQL` to setup the `orchid` table
+    2. Run `sql/1.sql` to setup the `orchid` table
     3. Import the Orchids sighting data via pgAdmin import tool
-    4. Run `sql/2.SQL` to create and setup the Geometry column
-    5. Run `sql/3.SQL` to create and setup the `eco_values` table
-  3. Pre-process the `eco_values`
+    4. Run `sql/2.sql` to create and setup the Geometry column
+    5. Run `sql/3.sql` to create and setup the `eco_value` table
+  3. Pre-process the `eco_value`
+    1. Run the `py/process.py` script, it will generate a `4.sql`
+    2. Run the `sql/4.sql` to populate the `eco_value` table with initial data

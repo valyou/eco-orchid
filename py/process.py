@@ -11,7 +11,7 @@ def get_value(raw_value):
     elif raw_value > 250:
         return 10
     else:
-        return int(math.ceil((float(raw_value) / float(250)) * 10))
+        return int(math.ceil((float(raw_value) / float(250)) * 100))
 
 def get_description(value):
     if value == 0:

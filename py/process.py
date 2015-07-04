@@ -1,8 +1,26 @@
 #/usr/bin/python2.7
 
 import sys
+import math
 import psycopg2
 import psycopg2.extras
+
+def get_value(raw_value):
+    if raw_value == 0:
+        return 0
+    elif raw_value > 250:
+        return 10
+    else:
+        return int(math.ceil((float(raw_value) / float(250)) * 10))
+
+def get_description(value):
+    if value == 0:
+        return "No Orchid sighting in the area"
+    elif value == 1:
+        return "1 Orchid sighting in the area"
+    else:
+        return "{0} Orchid sightings in the area".format(value)
+
 
 try:
     conn1 = psycopg2.connect("dbname=gh-2015_eco user=gh-2015_eco password=S3cret")
@@ -24,10 +42,15 @@ try:
 
     cur2 = conn2.cursor()
     for row in rows:
-        statement = """SELECT COUNT(*) FROM orchid o, sa2_cutdown s WHERE gid = {0} AND ST_Within(o.geom, s.geom)""".format(row[0])
-        cur2.execute(statement)
-        res = cur2.fetchone()
-        print "INSERT INTO \"public\".\"eco_value\" (\"sa2_main_11\", \"name\", \"code\", \"value_raw\") VALUES ('{0}', 'orchid', 'ecology', {1});".format(row[2], res[0])
+        filterSql = """SELECT COUNT(*) FROM orchid o, sa2_cutdown s WHERE gid = {0} AND ST_Within(o.geom, s.geom)""".format(row[0])
+        cur2.execute(filterSql)
+        result = cur2.fetchone()
+
+        raw_value = result[0]
+        value = get_value(raw_value)
+        description = get_description(raw_value)
+        insertSql = "INSERT INTO \"public\".\"category_values\" (\"gid\", \"category_code\", \"raw_value\", \"value\", \"description\") VALUES ('{0}', 'ORCHID', {1}, {2}, '{3}');".format(row[1], raw_value, value, description)
+        print insertSql
 
     sys.stdout = orig_stdout
     f.close()

@@ -1,0 +1,2 @@
+INSERT INTO "public"."category" ("category_code", "parent_category_code", "description") VALUES ('ECOLOGY', 'ECOLOGY', 'The amount of ecological diversity in the area');
+INSERT INTO "public"."category" ("category_code", "parent_category_code", "description") VALUES ('ORCHID', 'ECOLOGY', 'The number of Orchid sighting in the area');
